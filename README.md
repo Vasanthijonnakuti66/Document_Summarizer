@@ -10,11 +10,17 @@ It also provides key points, document statistics, extracted text, and improvemen
 
 ## Live Application
 
-**Frontend:**  
+### Frontend
+
 https://document-summarizer-two-jet.vercel.app
 
-**Backend Health Check:**  
-https://document-summarizer-backend.vercel.app/api/documents/health
+### Backend
+
+https://document-summarizer-backend-au63.onrender.com
+
+### Backend Health Check
+
+https://document-summarizer-backend-au63.onrender.com/api/documents/health
 
 ---
 
@@ -50,7 +56,7 @@ Scanned documents and images are processed using:
 - Pillow
 - PDF page rendering
 
-This allows the application to process both normal digital documents and scanned documents.
+The backend is containerized with Tesseract OCR installed, allowing OCR processing on the deployed server.
 
 ### 3. AI Summary Generation
 
@@ -100,7 +106,7 @@ Users can switch between short, medium, and long summaries without re-uploading 
 
 ---
 
-## Architecture
+# Architecture
 
 The project uses a decoupled client-server architecture.
 
@@ -126,7 +132,7 @@ graph TD
     Frontend -->|Render Analysis| Dashboard[Results Dashboard]
 ```
 
-### Frontend
+## Frontend
 
 The frontend is built using React and Vite.
 
@@ -141,7 +147,7 @@ Responsibilities include:
 - Results rendering
 - Error handling
 
-### Backend
+## Backend
 
 The backend is built using FastAPI.
 
@@ -155,15 +161,17 @@ Responsibilities include:
 - Structured JSON responses
 - CORS configuration
 
-### PDF Extraction
+## PDF Extraction
 
 **PyMuPDF** is used to extract text from searchable PDF documents page-by-page.
 
-### OCR Service
+## OCR Service
 
 **Tesseract OCR** and **Pillow** are used for scanned PDFs and image files.
 
-### AI Summarization
+The production backend runs inside a Docker container with Tesseract OCR installed as a system dependency.
+
+## AI Summarization
 
 The **Google Gemini API** analyzes the extracted document text and generates:
 
@@ -173,9 +181,9 @@ The **Google Gemini API** analyzes the extracted document text and generates:
 
 ---
 
-## Tech Stack
+# Tech Stack
 
-### Frontend
+## Frontend
 
 - React 19
 - Vite
@@ -183,7 +191,7 @@ The **Google Gemini API** analyzes the extracted document text and generates:
 - Lucide React
 - JavaScript
 
-### Backend
+## Backend
 
 - Python 3.11+
 - FastAPI
@@ -193,14 +201,25 @@ The **Google Gemini API** analyzes the extracted document text and generates:
 - Google Gemini API
 - PyTest
 
-### Deployment
+## OCR
 
-- Vercel
-- GitHub
+- Tesseract OCR
+- Pillow
+
+## Containerization
+
+- Docker
+- Python 3.11 Slim
+
+## Deployment
+
+- Vercel — Frontend
+- Render — Backend
+- GitHub — Source Control
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
 Document_Summarizer/
@@ -235,9 +254,10 @@ Document_Summarizer/
 │   ├── tests/
 │   │   └── test_endpoints.py
 │   │
+│   ├── Dockerfile
 │   ├── requirements.txt
-│   ├── .env
-│   └── .env.example
+│   ├── .env.example
+│   └── vercel.json
 │
 ├── frontend/
 │   ├── src/
@@ -274,13 +294,31 @@ Document_Summarizer/
 cd backend
 ```
 
-### 2. Install dependencies
+### 2. Create a virtual environment
+
+```bash
+python -m venv venv
+```
+
+Activate it on Windows:
+
+```powershell
+venv\Scripts\activate
+```
+
+Activate it on macOS/Linux:
+
+```bash
+source venv/bin/activate
+```
+
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure environment variables
+### 4. Configure environment variables
 
 Create a `.env` file based on `.env.example`.
 
@@ -290,11 +328,11 @@ GEMINI_MODEL=gemini-2.5-flash
 CORS_ORIGINS=http://localhost:5173
 ```
 
-> **Security:** Do not commit your actual Gemini API key to GitHub.
+> **Security:** Never commit your actual Gemini API key to GitHub.
 
-### 4. Install Tesseract OCR
+### 5. Install Tesseract OCR
 
-Tesseract is required for scanned documents and image OCR.
+Tesseract is required for scanned documents and image OCR when running the backend locally.
 
 #### Windows
 
@@ -315,10 +353,11 @@ brew install tesseract
 #### Linux
 
 ```bash
+sudo apt-get update
 sudo apt-get install tesseract-ocr
 ```
 
-### 5. Start the backend
+### 6. Start the backend
 
 From the `backend` directory:
 
@@ -332,7 +371,7 @@ The backend will be available at:
 http://localhost:8000
 ```
 
-### 6. Verify the backend
+### 7. Verify the backend
 
 Open:
 
@@ -349,7 +388,7 @@ Expected response:
 }
 ```
 
-### 7. Run backend tests
+### 8. Run backend tests
 
 On Windows PowerShell:
 
@@ -376,7 +415,7 @@ npm install
 
 ### 3. Configure the backend URL
 
-Create a `.env` file:
+Create a `.env` file inside the `frontend` directory:
 
 ```env
 VITE_API_URL=http://localhost:8000
@@ -400,7 +439,7 @@ http://localhost:5173
 
 The application currently supports files up to **4 MB**.
 
-### Supported formats
+## Supported formats
 
 ```text
 PDF
@@ -431,6 +470,12 @@ Files larger than **4 MB** are rejected before processing.
 GET /api/documents/health
 ```
 
+### Production URL
+
+```text
+https://document-summarizer-backend-au63.onrender.com/api/documents/health
+```
+
 ### Example Response
 
 ```json
@@ -448,6 +493,12 @@ GET /api/documents/health
 
 ```http
 POST /api/documents/analyze
+```
+
+### Production URL
+
+```text
+https://document-summarizer-backend-au63.onrender.com/api/documents/analyze
 ```
 
 ### Request Format
@@ -546,6 +597,12 @@ Searchable PDF             Image / Scanned PDF
 
 The React/Vite frontend is deployed using Vercel.
 
+### Live Frontend
+
+```text
+https://document-summarizer-two-jet.vercel.app
+```
+
 ### Build Configuration
 
 ```text
@@ -556,21 +613,78 @@ Output Directory: dist
 
 ### Environment Variable
 
-Configure the frontend environment variable:
+The deployed frontend uses:
 
 ```env
-VITE_API_URL=https://document-summarizer-backend.vercel.app
+VITE_API_URL=https://document-summarizer-backend-au63.onrender.com
 ```
 
-This allows the frontend to communicate with the deployed FastAPI backend.
+This allows the frontend to communicate with the production FastAPI backend hosted on Render.
 
 ---
 
-## Backend Deployment — Vercel
+# Backend Deployment — Render
 
-The FastAPI backend is deployed separately from the frontend.
+The FastAPI backend is deployed using Render.
 
-The backend requires the following environment variables:
+### Live Backend
+
+```text
+https://document-summarizer-backend-au63.onrender.com
+```
+
+### Backend Health Check
+
+```text
+https://document-summarizer-backend-au63.onrender.com/api/documents/health
+```
+
+### Render Configuration
+
+The backend is deployed as a Docker-based web service.
+
+```text
+Language: Docker
+Root Directory: backend
+```
+
+The Dockerfile installs:
+
+- Python 3.11
+- Tesseract OCR
+- Required system libraries
+- Python dependencies
+
+The container starts FastAPI using Uvicorn.
+
+### Dockerfile
+
+```dockerfile
+FROM python:3.11-slim
+
+# Install system dependencies required for OCR
+RUN apt-get update && apt-get install -y \
+    tesseract-ocr \
+    libgl1 \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy backend files
+COPY . .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Render provides the PORT environment variable
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+```
+
+### Render Environment Variables
+
+The backend requires:
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key
@@ -578,7 +692,9 @@ GEMINI_MODEL=gemini-2.5-flash
 CORS_ORIGINS=https://document-summarizer-two-jet.vercel.app
 ```
 
-> **Important:** `CORS_ORIGINS` should contain the deployed frontend origin without a trailing `/`.
+> **Important:** The actual Gemini API key should be stored only in Render environment variables and must never be committed to GitHub.
+
+### Production API
 
 The deployed backend provides:
 
@@ -586,6 +702,22 @@ The deployed backend provides:
 GET  /api/documents/health
 POST /api/documents/analyze
 ```
+
+---
+
+# OCR in Production
+
+One of the reasons for deploying the backend with Docker is to make Tesseract OCR available on the server.
+
+The production container installs Tesseract using:
+
+```dockerfile
+RUN apt-get update && apt-get install -y tesseract-ocr
+```
+
+Therefore, scanned PDFs and supported image files can be processed without requiring Tesseract to be installed on the user's computer.
+
+The user only needs a browser to access the application.
 
 ---
 
@@ -640,7 +772,7 @@ The backend handles:
 
 # Limitations
 
-### OCR Quality
+## OCR Quality
 
 OCR accuracy depends on:
 
@@ -650,13 +782,13 @@ OCR accuracy depends on:
 - Font style
 - Document layout
 
-### File Size
+## File Size
 
 The current maximum upload size is:
 
 **4 MB**
 
-### Large Documents
+## Large Documents
 
 To reduce the risk of exceeding AI token limits, documents containing large amounts of extracted text are divided into chunks and processed separately.
 
@@ -664,9 +796,24 @@ Documents exceeding approximately 30,000 characters may be processed using a chu
 
 Some cross-page context may therefore be generalized.
 
-### AI Dependency
+## AI Dependency
 
 Summary generation requires an active connection to the Google Gemini API.
+
+Gemini API rate limits may apply depending on the API account and selected model.
+
+If the available Gemini quota is exhausted, summary generation may temporarily fail until the quota becomes available again or the API account's limits are increased.
+
+## Render Free Tier
+
+The backend is hosted on Render's free instance for this project.
+
+Free hosting may have limitations such as:
+
+- Cold starts after inactivity
+- Limited CPU and memory
+- Slower processing for OCR-heavy documents
+- Temporary service availability limitations
 
 ---
 
@@ -690,6 +837,9 @@ Summary generation requires an active connection to the Google Gemini API.
 6. **Advanced Document Understanding**
    - Add table extraction, document classification, and layout-aware analysis.
 
+7. **Improved AI Resilience**
+   - Add retry handling, better quota handling, and alternative AI providers.
+
 ---
 
 # Security Considerations
@@ -697,7 +847,9 @@ Summary generation requires an active connection to the Google Gemini API.
 - API keys are stored using environment variables.
 - Sensitive `.env` files should not be committed to GitHub.
 - File type and size validation are performed before processing.
-- CORS is configured to restrict API access to approved frontend origins.
+- CORS is configured to restrict API access to the approved frontend origin.
+- The Gemini API key is stored as a server-side environment variable.
+- API credentials are never exposed through the frontend.
 
 ---
 
@@ -714,8 +866,10 @@ This project demonstrates:
 - File validation
 - Error handling
 - Responsive UI/UX
+- Docker containerization
 - Cloud deployment
 - Client-server architecture
+- Automated testing
 
 The application was developed as a practical Software Engineering technical assessment project.
 
