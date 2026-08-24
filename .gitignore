@@ -1,0 +1,27 @@
+# Python cache & build directories
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+venv/
+.venv/
+env/
+
+# Node modules & build files
+node_modules/
+dist/
+dist-ssr/
+*.local
+.eslintcache
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+backend/.env
