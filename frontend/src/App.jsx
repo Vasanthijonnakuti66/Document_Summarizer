@@ -42,7 +42,7 @@ function App() {
   const fileInputRef = useRef(null);
 
   // File Validation Rules
-  const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+  const MAX_SIZE = 4* 1024 * 1024; // 4MB
   const ALLOWED_TYPES = [
     "application/pdf",
     "image/png",
@@ -54,7 +54,7 @@ function App() {
   const validateFile = (selectedFile) => {
     if (!selectedFile) return "No file selected.";
     if (selectedFile.size === 0) return "The selected file is empty.";
-    if (selectedFile.size > MAX_SIZE) return "File size exceeds the 10MB limit.";
+    if (selectedFile.size > MAX_SIZE) return "File size exceeds the 4MB limit.";
     if (!ALLOWED_TYPES.includes(selectedFile.type)) {
       return "Unsupported file type. Please upload a PDF or an Image (PNG, JPG, WEBP).";
     }
@@ -278,7 +278,7 @@ function App() {
                   Drag and drop your file here, or <span className="text-blue-600 hover:underline">browse</span>
                 </p>
                 <p className="text-xs text-gray-500">
-                  Supports PDF, PNG, JPG, JPEG, WEBP (Max 10MB)
+                  Supports PDF, PNG, JPG, JPEG, WEBP (Max 4MB)
                 </p>
               </div>
 
