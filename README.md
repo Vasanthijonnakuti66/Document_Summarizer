@@ -871,8 +871,6 @@ This project demonstrates:
 - Client-server architecture
 - Automated testing
 
-The application was developed as a practical Software Engineering technical assessment project.
-
 ---
 
 # Author
